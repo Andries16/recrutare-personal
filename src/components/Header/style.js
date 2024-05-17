@@ -10,14 +10,14 @@ export const Head = styled.h1`
   cursor: pointer;
   font-family: "Trebuchet MS", "Lucida Sans Unicode", "Lucida Grande",
     "Lucida Sans", Arial, sans-serif;
-  color: #222831;
+  color: white;
   @media (min-width: 300px) and (max-width: 1190px) {
     margin: 10px auto;
   }
 `;
 export const Linkk = styled.link`
-text-decoration: none;
-`
+  text-decoration: none;
+`;
 export const StyledBoxes = styled.div`
   display: flex;
   gap: 300px;
@@ -113,7 +113,6 @@ export const Online = styled.button`
   transition: all 0.5s;
 `;
 export const Svg = styled.svg`
-height:100px ;
-width: 100px;
-
-`
+  height: 100px;
+  width: 100px;
+`;

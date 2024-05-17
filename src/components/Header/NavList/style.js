@@ -15,9 +15,8 @@ export const Styledul = styled.ul`
   }
 
   p:hover {
-    color: #3c8224;
-cursor:pointer;
-
+    color: #76abae;
+    cursor: pointer;
   }
   li > ul {
     display: none;
@@ -42,7 +41,6 @@ cursor:pointer;
   }
   li:hover > ul::after {
     content: "";
-
     display: block;
     position: absolute;
     bottom: 100%;
@@ -66,8 +64,7 @@ export const LiOptions = styled.li`
   display: block;
 `;
 export const P = styled.p`
-color:green ;
-font-family: Arial, Helvetica, sans-serif;
-font-weight: bolder;
-
-`
+  color: #76abae;
+  font-family: Arial, Helvetica, sans-serif;
+  font-weight: bolder;
+`;

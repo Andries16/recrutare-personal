@@ -30,8 +30,6 @@ const Routers = () => {
   return (
     <Suspense fallback={<Loading />}>
       <Routes>
-        <Route index element={<Navigate to="/login" />} />
-
         <Route
           path="/login"
           element={
@@ -57,7 +55,7 @@ const Routers = () => {
           path="/"
           element={<ProtectedRoute currentLocation={location.pathname} />}
         >
-          <Route path="/" element={<Home />} />
+          <Route path="/home" element={<Home />} />
           <Route path="/filter" element={<Filter />} />
           <Route path="/profile" element={<Profile />} />
           <Route path="/redirect" element={<Navigate to={"/profile"} />} />

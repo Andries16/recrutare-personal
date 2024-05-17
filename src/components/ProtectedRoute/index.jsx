@@ -5,7 +5,6 @@ import Main from "../../pages/Main";
 
 const ProtectedRoute = () => {
   const { authorized } = useAuthContext();
-  console.log(authorized);
   return (
     <div>
       {authorized ? (
