@@ -4,16 +4,15 @@ export const Box = styled.div`
   display: flex;
   flex-direction: column;
   width: 300px;
-  position: absolute;
-  top: 133px;
-  right: 100px;
+  margin-left: 50px;
 `;
 
 export const Profile = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  width: 300px;
+  width: 100%;
+  box-sizing: border-box;
   border: 1px solid #e4ebe4;
   border-radius: 10px;
   padding: 10px;
@@ -41,10 +40,11 @@ export const Profile = styled.div`
 `;
 
 export const Info = styled.ul`
-  width: 300px;
+  width: 100%;
   border: 1px solid #e4ebe4;
   border-radius: 10px;
   padding: 20px;
+  box-sizing: border-box;
   & li svg {
     background-color: #fff;
     border: 1px solid #909090;
@@ -54,13 +54,11 @@ export const Info = styled.ul`
     padding: 10px;
     border-radius: 30px;
     cursor: pointer;
-
   }
 
   & li p {
     width: 150px;
     display: inline-block;
-    
   }
   & li p span {
     display: block;
@@ -81,9 +79,8 @@ export const MoreInfo = styled.div`
   }
 
   & span {
-    width:200px;
+    width: 200px;
     display: inline-block;
     margin-left: 20px;
-    
   }
 `;

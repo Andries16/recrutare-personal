@@ -1,40 +1,43 @@
 import React, { useState } from "react";
-import axios from "axios";
 import google from "../../assets/google.svg";
 import apple from "../../assets/apple.png";
-import passwordshow from "../../assets/eye.png";
 import { useAuthContext } from "../../context/AuthContext";
+import { signInWithEmailAndPassword } from "firebase/auth";
 import {
   AlredyAccount,
   ErrorMessage,
   InputWrapper,
   Register,
-  ShowPassword,
   StyledButton,
   StyledForm,
   StyledImg,
   StyledLink,
   StyledOR,
-  SubmitButton,
 } from "./style";
 import { schema } from "./validation";
 import Header from "../../components/Header";
 import Footer from "../../components/Footer";
 
+import { collection, getDocs, query, where } from "firebase/firestore";
+import { db } from "../../firebase";
+import { useNavigate } from "react-router-dom";
+import { Button, CircularProgress, IconButton, Stack } from "@mui/material";
+import { RemoveRedEyeOutlined } from "@mui/icons-material";
+import { auth } from "../../firebase";
 function Login() {
   const {
     loading,
     setLoading,
     errors,
     setErrors,
-    setToken,
+    setUser,
     setAuthorized,
-    setUsername,
   } = useAuthContext();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [passwordType, setPasswordType] = useState("password");
 
+  const navigate = useNavigate();
   const handlePasswordShow = (e) => {
     e.preventDefault();
     setPasswordType(passwordType === "password" ? "text" : "password");
@@ -51,25 +54,21 @@ function Login() {
     setLoading(true);
     try {
       await schema.validate({ email, password }, { abortEarly: false });
-
-      const res = await axios.get(
-        `${process.env.REACT_APP_API_URL}/users?email=${email}&password=${password}`
+      signInWithEmailAndPassword(auth, email, password).then(
+        async (userCredential) => {
+          const user = userCredential.user;
+          const {
+            docs: [userDetails],
+          } = await getDocs(
+            query(collection(db, "users"), where("email", "==", user.email))
+          );
+          setUser(userDetails.data());
+          localStorage.setItem("user", JSON.stringify(userDetails));
+          setAuthorized(true);
+          navigate("/home");
+          setLoading(false);
+        }
       );
-
-      if (res.data.length > 0) {
-        const user = res.data[0];
-        setUsername(user.name);
-        setToken(user.token);
-        localStorage.setItem("token", user.token);
-        setUsername(user.name);
-        localStorage.setItem("name", user.name);
-        setErrors([]);
-        setLoading(false);
-        setAuthorized(true);
-      } else {
-        setErrors({ login: "email or password not correct" });
-        setLoading(false);
-      }
     } catch (e) {
       const errors = e.inner.reduce((acc, error) => {
         acc[error.path] = error.message;
@@ -84,9 +83,9 @@ function Login() {
     <>
       <Header form />
       <StyledForm onSubmit={handleSubmit}>
-        <Register>Log in to Recrtu Platform</Register>
+        <Register>Log in to Recrut </Register>
         <InputWrapper>
-          <label htmlFor="username">Username or Email</label>
+          <label htmlFor="username">Email</label>
           <input
             type="email"
             id="username"
@@ -94,32 +93,42 @@ function Login() {
             value={email}
             placeholder="Email or phone"
           />
+          {errors && errors.email && (
+            <ErrorMessage>{errors.email}</ErrorMessage>
+          )}
         </InputWrapper>
-        {errors && errors.email && <ErrorMessage>{errors.email}</ErrorMessage>}
+
         <InputWrapper>
           <label htmlFor="password">Password</label>
-          <input
-            type={passwordType}
-            id="password"
-            onChange={handleChangeInput}
-            value={password}
-            placeholder="Type Here"
-          />
+          <Stack flexDirection={"row"}>
+            <input
+              type={passwordType}
+              id="password"
+              onChange={handleChangeInput}
+              value={password}
+              placeholder="Type Here"
+            />
 
-          {errors && errors.password && (
-            <ErrorMessage>{errors.password}</ErrorMessage>
-          )}
-          <ShowPassword
-            src={passwordshow}
-            alt="passwordshow"
-            className="passwordshow"
-            onClick={handlePasswordShow}
-          />
+            {errors && errors.password && (
+              <ErrorMessage>{errors.password}</ErrorMessage>
+            )}
+            <IconButton
+              onClick={handlePasswordShow}
+              sx={{ marginRight: "-38px" }}
+            >
+              <RemoveRedEyeOutlined />
+            </IconButton>
+          </Stack>
         </InputWrapper>
 
-        <SubmitButton type="submit">
-          {loading ? "loading..." : "  Log In"}
-        </SubmitButton>
+        <Button
+          color="primary"
+          variant="contained"
+          type="submit"
+          sx={{ width: "60%", borderRadius: "20px", marginTop: "30px" }}
+        >
+          {loading ? <CircularProgress color="inherit" /> : "  Log In"}
+        </Button>
 
         <StyledOR>
           <div></div> <span>or</span> <div></div>

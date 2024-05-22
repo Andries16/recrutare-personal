@@ -25,6 +25,7 @@ export const StyledBoxes = styled.div`
 export const Stylednotifecation = styled.div`
   display: flex;
   position: relative;
+  align-items: center;
 `;
 
 export const AccountIMg = styled.div`
@@ -48,6 +49,7 @@ export const Profilediv = styled.div`
   position: absolute;
   top: 100%;
   right: 0;
+  color: black;
   width: 250px;
   border-radius: 6px;
   background-color: #ffffff;

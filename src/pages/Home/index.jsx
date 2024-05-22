@@ -8,6 +8,7 @@ import ScrollButton from "../../components/ScrollButton";
 import PersonalInformation from "../../components/PersonalInformation";
 import { useAuthContext } from "./../../context/AuthContext";
 import Searchbox from "../../components/Searchbox";
+import { Box, Stack } from "@mui/material";
 
 const Home = () => {
   const { searchValue } = useAuthContext();
@@ -15,20 +16,25 @@ const Home = () => {
     <>
       <Header />
       <Container>
-        <div>
-          <Searchbox width="795px" />
-          <div>
-            Recent Searches:{" "}
-            {searchValue.slice(-3).map((value, index) => (
-              <span key={index} style={{ textDecoration: "underline" }}>
-                {value}
-              </span>
-            ))}
-          </div>
-          <JobsLiked />
-          <ScrollButton />
-        </div>
-        <PersonalInformation />
+        <Stack flexDirection={"row"}>
+          <Box>
+            <TimeStatus />
+            <div>
+              <Searchbox width="795px" />
+              <div>
+                Recent Searches:{" "}
+                {searchValue.slice(-3).map((value, index) => (
+                  <span key={index} style={{ textDecoration: "underline" }}>
+                    {value}
+                  </span>
+                ))}
+              </div>
+              <JobsLiked />
+              <ScrollButton />
+            </div>
+          </Box>
+          <PersonalInformation />
+        </Stack>
       </Container>
       <Footer />
     </>

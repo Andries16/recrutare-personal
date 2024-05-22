@@ -1,7 +1,6 @@
 export default function PostAJob() {
   return (
     <section
-      className="text-feature-one position-relative pt-180 xl-pt-150 lg-pt-100 md-pt-80 pb-180 xl-pb-150"
       style={{
         boxSizing: "border-box",
         paddingTop: "180px",
@@ -11,7 +10,6 @@ export default function PostAJob() {
       }}
     >
       <div
-        className="container"
         style={{
           boxSizing: "border-box",
           width: "100%",
@@ -23,7 +21,6 @@ export default function PostAJob() {
         }}
       >
         <div
-          className="row"
           style={{
             boxSizing: "border-box",
             display: "flex",
@@ -34,7 +31,6 @@ export default function PostAJob() {
           }}
         >
           <div
-            className="col-lg-8 order-lg-last"
             style={{
               boxSizing: "border-box",
               maxWidth: "100%",
@@ -48,7 +44,6 @@ export default function PostAJob() {
             }}
           >
             <div
-              className="ps-xxl-4 wow fadeInRight"
               style={{
                 boxSizing: "border-box",
                 animationName: "fadeInRight",
@@ -57,7 +52,6 @@ export default function PostAJob() {
               }}
             >
               <div
-                className="title-one"
                 style={{
                   boxSizing: "border-box",
                 }}
@@ -77,7 +71,6 @@ export default function PostAJob() {
                 </h2>
               </div>
               <p
-                className="mt-40 md-mt-20 mb-40 md-mb-20"
                 style={{
                   boxSizing: "border-box",
                   lineHeight: "2em",
@@ -131,31 +124,9 @@ export default function PostAJob() {
                   - Protected payments system
                 </li>
               </ul>
-              <a
-                className="btn-one lg mt-50 md-mt-30"
-                href=""
-                style={{
-                  boxSizing: "border-box",
-                  textDecoration: "none",
-                  display: "inline-block",
-                  borderRadius: "50px",
-                  border: "2px solid transparent",
-                  transition: "all 0.3s ease-in-out 0s",
-                  textTransform: "capitalize",
-                  fontWeight: 500,
-                  textAlign: "center",
-                  color: "#EEEEEE",
-                  backgroundColor: "#76ABAE",
-                  marginTop: "50px",
-                  padding: "8px 32px",
-                }}
-              >
-                Post a Job
-              </a>
             </div>
           </div>
           <div
-            className="col-lg-7 col-md-11 m-auto order-lg-first"
             style={{
               boxSizing: "border-box",
               maxWidth: "100%",

@@ -23,20 +23,20 @@ const SkillsModal = () => {
 
   return (
     <div>
-       <svg
-            onClick={handleOpen}
-            xmlns="http://www.w3.org/2000/svg"
-            aria-hidden="true"
-            fill="#3c8224"
-            viewBox="0 0 14 14"
-            role="img"
-            style={{ width:"30px",height:"30px",cursor:"pointer",position:'absolute',top:'700px',right:"600px"}}
-          >
-            <path
-              fillRule="evenodd"
-              d="M0 11.044V14h2.956l8.555-8.633L8.556 2.41 0 11.044zm13.767-7.933a.752.752 0 000-1.089L11.977.233a.752.752 0 00-1.088 0l-1.4 1.4 2.955 2.956 1.323-1.478z"
-            ></path>
-          </svg>
+      <svg
+        onClick={handleOpen}
+        xmlns="http://www.w3.org/2000/svg"
+        aria-hidden="true"
+        fill="#3c8224"
+        viewBox="0 0 14 14"
+        role="img"
+        style={{ width: "30px", height: "30px", cursor: "pointer" }}
+      >
+        <path
+          fillRule="evenodd"
+          d="M0 11.044V14h2.956l8.555-8.633L8.556 2.41 0 11.044zm13.767-7.933a.752.752 0 000-1.089L11.977.233a.752.752 0 00-1.088 0l-1.4 1.4 2.955 2.956 1.323-1.478z"
+        ></path>
+      </svg>
 
       <Modal
         open={open}
@@ -52,9 +52,8 @@ const SkillsModal = () => {
             Skills Keeping your skills up to date helps you get the jobs you
             want.
           </Typography>
-          <SkillBox handleClose={handleClose}/>
+          <SkillBox handleClose={handleClose} />
         </Box>
-
       </Modal>
     </div>
   );

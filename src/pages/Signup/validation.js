@@ -17,7 +17,6 @@ export const schema = yup.object().shape({
   password: yup
     .string()
     .min(8, "Password must be at least 8 characters long")
-    .matches(regularExpression, "Invalid Password")
     .required("Password is required"),
   checked: yup
     .boolean()

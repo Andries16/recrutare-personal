@@ -4,7 +4,7 @@ import Typography from "@mui/material/Typography";
 import Modal from "@mui/material/Modal";
 import axios from "axios";
 import { Navigate } from "react-router-dom";
-import {Input,Button} from './ImgModal/style'
+import { Input, Button } from "./ImgModal/style";
 
 const style = {
   position: "absolute",
@@ -42,7 +42,6 @@ const OverViewModal = () => {
           setRate(res.data[0].rate);
           setSkills(res.data[0].skills);
           setImg(res.data[0].image);
-
         }
       } catch (error) {
         console.log(error);
@@ -67,8 +66,7 @@ const OverViewModal = () => {
             title: title,
             rate: rate,
             skills: skills,
-            image:img
-
+            image: img,
           }
         );
         if (res) {
@@ -83,19 +81,19 @@ const OverViewModal = () => {
   return (
     <div>
       <svg
-            onClick={handleOpen}
-            xmlns="http://www.w3.org/2000/svg"
-            aria-hidden="true"
-            fill="#3c8224"
-            viewBox="0 0 14 14"
-            role="img"
-            style={{ width:"30px",height:"30px",cursor:"pointer",position:'absolute',top:'400px',right:"300px"}}
-          >
-            <path
-              fillRule="evenodd"
-              d="M0 11.044V14h2.956l8.555-8.633L8.556 2.41 0 11.044zm13.767-7.933a.752.752 0 000-1.089L11.977.233a.752.752 0 00-1.088 0l-1.4 1.4 2.955 2.956 1.323-1.478z"
-            ></path>
-          </svg>
+        onClick={handleOpen}
+        xmlns="http://www.w3.org/2000/svg"
+        aria-hidden="true"
+        fill="#3c8224"
+        viewBox="0 0 14 14"
+        role="img"
+        style={{ width: "30px", height: "30px", cursor: "pointer" }}
+      >
+        <path
+          fillRule="evenodd"
+          d="M0 11.044V14h2.956l8.555-8.633L8.556 2.41 0 11.044zm13.767-7.933a.752.752 0 000-1.089L11.977.233a.752.752 0 00-1.088 0l-1.4 1.4 2.955 2.956 1.323-1.478z"
+        ></path>
+      </svg>
 
       <Modal
         open={open}
@@ -107,11 +105,18 @@ const OverViewModal = () => {
           <Typography id="modal-modal-title" variant="h4" component="h2">
             Edit Your Overview
           </Typography>
-          <div style={{width:"400px",height:"60px",marginBottom:"50px",marginTop:"20px" }}>
-          Use this space to show clients you have the skills and experience they're looking for.
-          Describe your strengths and skills.
-          Highlight projects, accomplishments and education
-          Keep it short and make sure it's error-free
+          <div
+            style={{
+              width: "400px",
+              height: "60px",
+              marginBottom: "50px",
+              marginTop: "20px",
+            }}
+          >
+            Use this space to show clients you have the skills and experience
+            they're looking for. Describe your strengths and skills. Highlight
+            projects, accomplishments and education Keep it short and make sure
+            it's error-free
           </div>
           <form onSubmit={handleUpdateTitle}>
             <Input

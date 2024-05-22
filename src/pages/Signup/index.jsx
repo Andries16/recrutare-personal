@@ -12,15 +12,16 @@ import {
   StyledOR,
   SubmitButton,
 } from "../Login/style";
-
+import { createUserWithEmailAndPassword } from "firebase/auth";
+import { auth, db } from "../../firebase";
+import { addDoc, collection, getDocs, query, where } from "firebase/firestore";
 import google from "../../assets/google.svg";
 import apple from "../../assets/apple.png";
 import passwordshow from "../../assets/eye.png";
 
-import { CheckedInputWrapper, InputFullName } from "./style";
+import { CheckedInputWrapper } from "./style";
 import { useAuthContext } from "../../context/AuthContext";
 import { schema } from "./validation";
-import axios from "axios";
 import Header from "../../components/Header";
 import Footer from "../../components/Footer";
 
@@ -31,8 +32,7 @@ const Signup = () => {
     setLoading,
     errors,
     setErrors,
-    setToken,
-    setUsername,
+    setUser,
   } = useAuthContext();
 
   const [firstname, setFirstName] = useState("");
@@ -41,8 +41,7 @@ const Signup = () => {
   const [password, setPassword] = useState("");
   const [checked, setChecked] = useState(false);
   const [passwordType, setPasswordType] = useState("password");
-  
-
+  const [openSignUpModal, setOpenSignUpModal] = useState(false);
   const handleChangeInput = (e) => {
     const { value, id } = e.target;
     if (id === "firstname") setFirstName(value);
@@ -60,7 +59,6 @@ const Signup = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     setLoading(true);
-
     schema
       .validate(
         {
@@ -73,28 +71,29 @@ const Signup = () => {
         { abortEarly: false }
       )
       .then(async () => {
-        const res = await axios.post(`${process.env.REACT_APP_API_URL}/users`, {
-          name: firstname,
-          email: email,
-          password: password,
-        });
-        if (res) {
-          setToken(res.data.token);
-          localStorage.setItem("token", res.data.token);
-          setUsername(res.data.name);
-          localStorage.setItem("name", res.data.name);
-          setErrors([]);
-          setLoading(false);
-          setAuthorized(true);
-        }
+        createUserWithEmailAndPassword(auth, email, password).then(
+          async (userCredential) => {
+            const user = userCredential.user;
+            let { photoURL, displayName, email } = user;
+            if (!displayName) displayName = firstname + " " + lastname;
+            const userToSave = {
+              photoURL,
+              displayName,
+              email,
+              isCompleted: false,
+              connects: 100,
+            };
+            await addDoc(collection(db, "users"), userToSave);
+            setUser(userToSave);
+            setAuthorized(true);
+          }
+        );
       })
       .catch((e) => {
         const errors = e.inner.reduce((acc, error) => {
           acc[error.path] = error.message;
-
           return acc;
         }, {});
-
         setErrors(errors);
         setLoading(false);
       });
@@ -118,29 +117,28 @@ const Signup = () => {
           <div></div> <span>or</span> <div></div>
         </StyledOR>
 
-        <InputFullName>
-          <div>
-            <label htmlFor="firstname">First Name</label>
-            <input
-              type="text"
-              id="firstname"
-              onChange={handleChangeInput}
-              value={firstname}
-              placeholder="Type here"
-            />
-          </div>
+        <InputWrapper>
+          <label htmlFor="firstname">First Name</label>
+          <input
+            type="text"
+            id="firstname"
+            onChange={handleChangeInput}
+            value={firstname}
+            placeholder="Type here"
+          />
+        </InputWrapper>
 
-          <div>
-            <label htmlFor="lastname">Last Name</label>
-            <input
-              type="text"
-              id="lastname"
-              onChange={handleChangeInput}
-              value={lastname}
-              placeholder="Type here"
-            />
-          </div>
-        </InputFullName>
+        <InputWrapper>
+          <label htmlFor="lastname">Last Name</label>
+          <input
+            type="text"
+            id="lastname"
+            onChange={handleChangeInput}
+            value={lastname}
+            placeholder="Type here"
+          />
+        </InputWrapper>
+
         {errors && errors.firstname && (
           <ErrorMessage>{errors.firstname}</ErrorMessage>
         )}

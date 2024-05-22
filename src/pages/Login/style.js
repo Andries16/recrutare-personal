@@ -22,7 +22,7 @@ export const StyledForm = styled.form`
 export const Register = styled.h3`
   font-size: 1.5em;
   letter-spacing: 0.1rem;
-  color: #000000;
+  color: #ffff;
   font-family: "Arial";
   font-weight: 600;
 
@@ -47,9 +47,11 @@ export const InputWrapper = styled.div`
     width: 20rem;
     padding: 0.8rem;
     border-radius: 10px;
-    border: 1px solid #ccc;
+    border: 1px solid white;
     font-size: 14px;
     outline: none;
+    background: transparent;
+    color: white;
   }
 
   @media (min-width: 300px) and (max-width: 1200px) {
@@ -66,6 +68,7 @@ export const ShowPassword = styled.img`
   top: 42px;
   left: 330px;
   cursor: pointer;
+  color: white;
 
   @media (min-width: 300px) and (max-width: 1200px) {
     left: 240px;
@@ -75,7 +78,7 @@ export const ShowPassword = styled.img`
 export const SubmitButton = styled.button`
   width: 22.5rem;
   color: white;
-  background: #222831;
+  background: black;
   margin-top: 20px;
   padding: 1rem;
   border: none;
@@ -162,7 +165,7 @@ export const AlredyAccount = styled.div`
 export const StyledLink = styled(Link)`
   font-family: "Arial";
   text-decoration: none;
-  color: #222831;
+  color: white;
 `;
 
 export const ErrorMessage = styled.span`
