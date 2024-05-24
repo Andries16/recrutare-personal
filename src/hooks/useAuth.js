@@ -1,8 +1,5 @@
-import { collection, getDocs, query, where } from "firebase/firestore";
+import { getAuth, signOut } from "firebase/auth";
 import { useState } from "react";
-import { onAuthStateChanged } from "firebase/auth";
-import { auth, db } from "../firebase";
-import { useEffect } from "react";
 const useAuth = () => {
   const searchedValues = JSON.parse(localStorage.getItem("searchValues")) || [];
 
@@ -17,24 +14,11 @@ const useAuth = () => {
     localStorage.removeItem("token");
     localStorage.removeItem("name");
     setToken("");
+    const auth = getAuth();
+    signOut(auth);
     setUser(undefined);
     setAuthorized(false);
   };
-
-  useEffect(
-    () =>
-      onAuthStateChanged(auth, async (user) => {
-        if (user) {
-          const userExist = await getDocs(
-            query(collection(db, "users"), where("email", "==", user.email))
-          );
-          if (userExist) {
-            setUser(userExist);
-          }
-        } else setUser(null);
-      }),
-    [setUser]
-  );
 
   return {
     authorized,

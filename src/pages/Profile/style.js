@@ -1,11 +1,13 @@
 import styled from "styled-components";
 
 export const Container = styled.div`
-  border: 1px solid rgb(205 201 200);
   width: 80%;
   margin: auto;
   padding: 50px;
-  margin-top: 50px;
+  margin: 50px auto;
+  margin-bottom: 100px;
+  background: #313a49;
+  border-radius: 20px;
 `;
 export const OverView = styled.p`
   padding-right: 10px;

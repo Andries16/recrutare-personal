@@ -2,9 +2,17 @@ import React, { useEffect, useState } from "react";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Modal from "@mui/material/Modal";
-import axios from "axios";
-import { Navigate } from "react-router-dom";
-import { Input, Button } from "./ImgModal/style";
+import {
+  collection,
+  getDocs,
+  query,
+  updateDoc,
+  where,
+} from "firebase/firestore";
+import { db } from "../../firebase";
+import { Edit } from "@mui/icons-material";
+import { Button, TextField } from "@mui/material";
+import { useAuthContext } from "../../context/AuthContext";
 
 const style = {
   position: "absolute",
@@ -13,7 +21,11 @@ const style = {
   transform: "translate(-50%, -50%)",
   width: 500,
   bgcolor: "background.paper",
-  border: "2px solid #000",
+  border: "none",
+  "&:focus-visible": {
+    border: "none",
+    outline: "none",
+  },
   boxShadow: 24,
   p: 10,
 };
@@ -23,62 +35,34 @@ const TitleModal = () => {
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
   const [newTitle, setNewTitle] = useState("");
-  const [overView, setOverView] = useState("");
-  const [rate, setRate] = useState("");
-  const [skills, setSkills] = useState([]);
-  const [img, setImg] = useState("");
-
-  const [navigator, setNavigator] = useState(false);
+  const { user, setUser } = useAuthContext();
 
   const handleChangeInput = (e) => {
     const { value } = e.target;
     setNewTitle(value);
   };
-
-  const handleUpdateTitle = (e) => {
+  useEffect(() => {
+    setNewTitle(user.jobTitle);
+  }, [user.jobTitle]);
+  const handleUpdateTitle = async (e) => {
     e.preventDefault();
-
-    (async () => {
-      try {
-        const res = await axios.put(
-          `${process.env.REACT_APP_API_URL}/personalInformation/1`,
-          {
-            title: newTitle,
-            overview: overView,
-            rate: rate,
-            skills: skills,
-            image: img,
-          }
-        );
-        if (res) {
-          setNavigator(true);
-        }
-      } catch (error) {
-        console.log(error);
-      }
-    })();
+    const {
+      docs: [userSnap],
+    } = await getDocs(
+      query(collection(db, "users"), where("email", "==", user.email))
+    );
+    setUser({ ...user, jobTitle: newTitle });
+    await updateDoc(userSnap.ref, { jobTitle: newTitle });
+    handleClose();
   };
 
   return (
     <div>
-      <svg
+      <Edit
         onClick={handleOpen}
-        xmlns="http://www.w3.org/2000/svg"
-        aria-hidden="true"
-        fill="#3c8224"
-        viewBox="0 0 14 14"
-        role="img"
-        style={{
-          width: "30px",
-          height: "30px",
-          cursor: "pointer",
-        }}
-      >
-        <path
-          fillRule="evenodd"
-          d="M0 11.044V14h2.956l8.555-8.633L8.556 2.41 0 11.044zm13.767-7.933a.752.752 0 000-1.089L11.977.233a.752.752 0 00-1.088 0l-1.4 1.4 2.955 2.956 1.323-1.478z"
-        ></path>
-      </svg>
+        sx={{ width: "30px", height: "30px", cursor: "pointer" }}
+        color="secondary"
+      />
       <Modal
         open={open}
         onClose={handleClose}
@@ -94,15 +78,26 @@ const TitleModal = () => {
             skills/experience (e.g. Expert Web Designer with Ajax experience)
           </Typography>
           <form onSubmit={handleUpdateTitle}>
-            <Input type="text" value={newTitle} onChange={handleChangeInput} />
-            <Button type="submit">save</Button>
-            <Button type="button" onClick={handleClose}>
-              cancel
+            <TextField
+              type="text"
+              value={newTitle}
+              onChange={handleChangeInput}
+              sx={{ width: "100%", marginBottom: "20px" }}
+            />
+            <Button type="submit" color="secondary">
+              Save
+            </Button>
+            <Button
+              type="button"
+              color="secondary"
+              variant="outlined"
+              onClick={handleClose}
+            >
+              Cancel
             </Button>
           </form>
         </Box>
       </Modal>
-      {navigator ? <Navigate to={"/redirect"} /> : ""}
     </div>
   );
 };

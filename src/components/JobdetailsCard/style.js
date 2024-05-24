@@ -4,14 +4,15 @@ export const JobDetailCard = styled.div`
   width: 1100px;
   margin: 40px auto;
   border-radius: 10px;
-  border: 1px solid #d5e0d5;
-
+  border: 1px solid #3b3c40;
   display: flex;
 `;
 
 export const Right = styled.div`
   width: 75%;
-  border-right: 1px solid #d5e0d5;
+  border-right: 1px solid #3b3c40;
+  display: flex;
+  flex-direction: column;
 `;
 
 export const Left = styled.div`
@@ -20,7 +21,7 @@ export const Left = styled.div`
 
 export const Jobtitle = styled.h1`
   font-weight: 500;
-  margin-bottom: 50px;
+  margin-bottom: 20px;
   padding: 14px;
 `;
 
@@ -32,7 +33,7 @@ export const Jobspeciality = styled.p`
 `;
 
 export const Span = styled.p`
-  color: #5e6d55;
+  color: grey;
   display: block;
   padding-left: 14px;
   width: 780px;
@@ -59,5 +60,3 @@ export const JobStatus = styled.div`
     color: #5e6d55;
   }
 `;
-
-

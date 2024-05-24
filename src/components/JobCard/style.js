@@ -3,16 +3,14 @@ import styled from "styled-components";
 export const Cardjob = styled.div`
   position: relative;
   padding: 20px 50px;
-  border-bottom: 2px solid rgb(159 155 155);;
+  margin: 20px;
+  background: rgb(49 58 73);
+  border-radius: 20px;
   &:hover {
-    background-color: #f2f7f2;
-    border-radius: 6px;
     & h3 {
       color: #222831;
     }
   }
-
-
 `;
 
 export const Jobdetail = styled.div`
@@ -22,13 +20,12 @@ export const Jobdetail = styled.div`
   gap: 2px;
 
   & span {
-  color: #888;
-
+    color: #888;
   }
 `;
 
 export const JobDescription = styled.p`
-font-size:"16px"
+  font-size: "16px";
 `;
 
 export const ToggleSaveBtn = styled.button`
@@ -40,22 +37,22 @@ export const ToggleSaveBtn = styled.button`
   right: 30px;
 `;
 
-
-export const Jobdetail2=styled.div`
-display:flex;
-gap:10px;
-& span {
-  color: #888;
-
+export const Jobdetail2 = styled.div`
+  display: flex;
+  gap: 10px;
+  & span {
+    color: #888;
   }
-`
+`;
 export const Span = styled.span`
   display: block;
-  color: #108a00;
+  color: grey;
   cursor: pointer;
-
 `;
 export const P = styled.p`
-font-size: 22px;
-
-`
+  font-size: 22px;
+  &:hover {
+    cursor: pointer;
+    text-decoration: underline;
+  }
+`;

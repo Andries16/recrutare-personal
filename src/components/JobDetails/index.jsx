@@ -1,44 +1,53 @@
 import React, { useState, useEffect } from "react";
-import axios from "axios";
 import JobCard from "../JobCard";
 import styled from "styled-components";
 import { Divider } from "@mui/material";
+import { collection, query, limit, getDocs, where } from "firebase/firestore";
+import { db } from "../../firebase";
+import { useAuthContext } from "../../context/AuthContext";
+import TalentCard from "../TalentCard";
 
 function JobDetails() {
   const [job, setJob] = useState([]);
- 
-
+  const { user } = useAuthContext();
   useEffect(() => {
-    (async () => {
-      try {
-        const res = await axios.get(
-          `${process.env.REACT_APP_API_URL}/jobs`
-        );
-        if (res) {
-          setJob(res.data);
-        }
-      } catch (error) {
-        console.log(error);
-      }
-    })();
-  }, []);
+    if (user.type === "recrut")
+      getDocs(query(collection(db, "jobs"), limit(5))).then((snap) => {
+        if (snap.docs.length) setJob(snap.docs.map((doc) => doc.data()));
+      });
+    else
+      getDocs(
+        query(
+          collection(db, "users"),
+          limit(30),
+          where("type", "==", "recrut"),
+          where("available", "==", true)
+        )
+      ).then((snap) => {
+        if (snap.docs.length) setJob(snap.docs.map((doc) => doc.data()));
+      });
+  }, [user.type]);
   return (
     <>
       <Text>
-        Browse jobs that match your experience to a client's hiring preferences.
-        Ordered by most relevant.
+        {user.type === "recrut"
+          ? "Browse jobs that match your experience to a client's hiring preferences.Ordered by most relevant."
+          : " Browse talents that match your hiring preferences."}
       </Text>
+      {user.type === "recrut" ? (
+        <JobCard Jobdetails={job} />
+      ) : (
+        <TalentCard talentDetails={job} />
+      )}
 
-      <JobCard Jobdetails={job} />
       <Divider variant="fullWidth" />
-
     </>
   );
 }
 
 export const Text = styled.span`
   font-size: 14px;
-  color: #001e00;
+  color: #ffff;
   margin-bottom: 20px;
 `;
 

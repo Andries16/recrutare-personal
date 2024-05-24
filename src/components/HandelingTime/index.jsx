@@ -1,6 +1,6 @@
 import React from "react";
 
-import status from "../../assets/status.png";
+import status from "../../assets/status2.png";
 
 import { Status, StatusOfTime, Time } from "./style";
 

@@ -22,7 +22,7 @@ const ProfileImage = ({ click }) => {
         }}
         src={user.photoURL}
       >
-        <Input type="file" sx={{ display: "none" }} multiple />
+        <Input type="file" multiple />
       </Avatar>
       <Typography sx={{ marginTop: "10px" }}>Profile picture</Typography>
     </label>

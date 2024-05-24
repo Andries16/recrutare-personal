@@ -13,6 +13,9 @@ export const Styledul = styled.ul`
   li > li {
     font-size: 14px;
   }
+  a.active {
+    font-size: 12px !important;
+  }
 
   p:hover {
     color: #76abae;
@@ -61,6 +64,7 @@ export const LiOptions = styled.li`
     cursor: pointer;
   }
   padding: 10px;
+  font-size:14px !important
   display: block;
 `;
 export const P = styled.p`

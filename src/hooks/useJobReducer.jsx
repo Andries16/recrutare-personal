@@ -23,7 +23,7 @@ const Reduce = (state, action) => {
     case ACTIONS.UN_SAVE_JOB:
       return {
         ...state,
-        jobs: state.jobs.filter((job) => job.id !== action.payload),
+        jobs: state.jobs.filter((job) => job.key !== action.payload),
         count: state.count - 1,
       };
 

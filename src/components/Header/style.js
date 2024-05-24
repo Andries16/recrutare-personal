@@ -4,6 +4,8 @@ export const Stylednav = styled.nav`
   display: flex;
   justify-content: space-around;
   align-items: center;
+  background: rgb(49, 58, 73);
+  color: white;
 `;
 
 export const Head = styled.h1`

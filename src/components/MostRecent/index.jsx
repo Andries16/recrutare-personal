@@ -1,49 +1,56 @@
-import { Button, Divider } from "@mui/material";
-import axios from "axios";
+import { Divider } from "@mui/material";
 import React, { useEffect, useState } from "react";
+import {
+  collection,
+  query,
+  limit,
+  getDocs,
+  orderBy,
+  where,
+} from "firebase/firestore";
 import JobCard from "../JobCard";
 import { Text } from "../JobDetails";
+import { db } from "../../firebase";
+import { useAuthContext } from "../../context/AuthContext";
+import TalentCard from "../TalentCard";
 
 const MostRecent = () => {
   const [mostJob, setMostJob] = useState([]);
-  const [count, setCount] = useState(3);
-
-  const handleLoadJobs = () => {
-    setCount((prevCount) => prevCount + 3);
-  };
-
+  const user = useAuthContext();
   useEffect(() => {
-    (async () => {
-      try {
-        const res = await axios.get(
-          `${process.env.REACT_APP_API_URL}/jobs?_sort=id&_order=desc_page=1&_limit=${count}`
-        );
-        if (res) {
-          setMostJob(res.data);
-        }
-      } catch (error) {
-        console.log(error);
-      }
-    })();
-  }, [count]);
+    if (user.type === "recrut") {
+      getDocs(
+        query(collection(db, "jobs"), limit(30), orderBy("date", "desc"))
+      ).then((snap) => {
+        if (snap.docs.length) setMostJob(snap.docs.map((doc) => doc.data()));
+      });
+    } else {
+      getDocs(
+        query(
+          collection(db, "users"),
+          limit(30),
+          where("type", "==", "recrut"),
+          where("available", "==", true)
+        )
+      ).then((snap) => {
+        if (snap.docs.length) setMostJob(snap.docs.map((doc) => doc.data()));
+      });
+    }
+  }, [user.type]);
 
   return (
     <>
       <Text>
-        Browse the most recent jobs that match your skills and profile
-        description to the skills clients are looking for.
+        {user.type === "recrut"
+          ? "Browse the most recent jobs that match your skills and profile description to the skills clients are looking for."
+          : "Browse the most recent recruts that match your job skills"}
       </Text>
-
-      <JobCard Jobdetails={mostJob} />
+      {user.type === "recrut" ? (
+        <JobCard Jobdetails={mostJob} />
+      ) : (
+        <TalentCard talentDetails={mostJob} />
+      )}
       <Divider variant="fullWidth" />
-      <Button
-        onClick={handleLoadJobs}
-        variant="outlined"
-        color="success"
-        sx={{ borderRadius: "6px"}}
-      >
-        load more jobs
-      </Button>
     </>
   );
 };

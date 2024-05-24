@@ -4,7 +4,6 @@ import {
   ErrorMessage,
   InputWrapper,
   Register,
-  ShowPassword,
   StyledButton,
   StyledForm,
   StyledImg,
@@ -14,10 +13,9 @@ import {
 } from "../Login/style";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { auth, db } from "../../firebase";
-import { addDoc, collection, getDocs, query, where } from "firebase/firestore";
+import { addDoc, collection } from "firebase/firestore";
 import google from "../../assets/google.svg";
 import apple from "../../assets/apple.png";
-import passwordshow from "../../assets/eye.png";
 
 import { CheckedInputWrapper } from "./style";
 import { useAuthContext } from "../../context/AuthContext";
@@ -25,6 +23,10 @@ import { schema } from "./validation";
 import Header from "../../components/Header";
 import Footer from "../../components/Footer";
 
+import { IconButton, Stack } from "@mui/material";
+import { RemoveRedEyeOutlined } from "@mui/icons-material";
+
+import { signInWithPopup, GoogleAuthProvider } from "firebase/auth";
 const Signup = () => {
   const {
     setAuthorized,
@@ -41,7 +43,7 @@ const Signup = () => {
   const [password, setPassword] = useState("");
   const [checked, setChecked] = useState(false);
   const [passwordType, setPasswordType] = useState("password");
-  const [openSignUpModal, setOpenSignUpModal] = useState(false);
+
   const handleChangeInput = (e) => {
     const { value, id } = e.target;
     if (id === "firstname") setFirstName(value);
@@ -56,8 +58,7 @@ const Signup = () => {
     setPasswordType(passwordType === "password" ? "text" : "password");
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
+  const handleSubmit = () => {
     setLoading(true);
     schema
       .validate(
@@ -98,18 +99,18 @@ const Signup = () => {
         setLoading(false);
       });
   };
+
+  const signInWithGoogle = async () => {
+    const provider = new GoogleAuthProvider();
+    await signInWithPopup(auth, provider);
+  };
+
   return (
     <>
       <Header form />
-
-      <StyledForm onSubmit={handleSubmit}>
+      <StyledForm>
         <Register>Sign up to find work you love</Register>
-
-        <StyledButton>
-          <StyledImg src={apple} alt="facebook" facebook={apple} />
-          Continue with apple
-        </StyledButton>
-        <StyledButton facebook={apple}>
+        <StyledButton type="button" facebook={apple} onClick={signInWithGoogle}>
           <StyledImg src={google} alt="google" />
           Continue with Google
         </StyledButton>
@@ -158,23 +159,25 @@ const Signup = () => {
         {errors && errors.email && <ErrorMessage>{errors.email}</ErrorMessage>}
         <InputWrapper>
           <label htmlFor="password">Password</label>
-          <input
-            type={passwordType}
-            id="password"
-            onChange={handleChangeInput}
-            value={password}
-            placeholder="Password (8 or more characters)"
-          />
+          <Stack flexDirection={"row"}>
+            <input
+              type={passwordType}
+              id="password"
+              onChange={handleChangeInput}
+              value={password}
+              placeholder="Password (8 or more characters)"
+            />
 
+            <IconButton
+              onClick={handlePasswordShow}
+              sx={{ marginRight: "-38px" }}
+            >
+              <RemoveRedEyeOutlined />
+            </IconButton>
+          </Stack>
           {errors && errors.password && (
             <ErrorMessage>{errors.password}</ErrorMessage>
           )}
-          <ShowPassword
-            src={passwordshow}
-            alt="passwordshow"
-            className="passwordshow"
-            onClick={handlePasswordShow}
-          />
         </InputWrapper>
 
         <CheckedInputWrapper>
@@ -191,10 +194,9 @@ const Signup = () => {
         {errors && errors.checked && (
           <ErrorMessage>{errors.checked}</ErrorMessage>
         )}
-        <SubmitButton type="submit">
+        <SubmitButton type="button" onClick={handleSubmit}>
           {loading ? "loading..." : "Create My Account"}
         </SubmitButton>
-
         <AlredyAccount>Already have an account?</AlredyAccount>
         <StyledLink to="/login"> Log In</StyledLink>
       </StyledForm>

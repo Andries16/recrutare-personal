@@ -2,9 +2,10 @@ import { Autocomplete, TextField } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { Iconsearch, Search } from "./style";
 import SearchIcon from "@mui/icons-material/Search";
-import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { useAuthContext } from "../../context/AuthContext";
+import { collection, getDocs, query } from "firebase/firestore";
+import { db } from "../../firebase";
 
 const Searchbox = ({ width }) => {
   const [search, setSearch] = useState("");
@@ -12,59 +13,56 @@ const Searchbox = ({ width }) => {
   const { searchValue, setSearchValue } = useAuthContext();
 
   useEffect(() => {
-    (async () => {
-      try {
-        const res = await axios.get(`${process.env.REACT_APP_API_URL}/jobs`);
-
-        if (res) {
-          setAllJobs(res.data);
-        }
-      } catch (error) {
-        console.log(error);
-      }
-    })();
+    getDocs(query(collection(db, "jobs"))).then((result) =>
+      setAllJobs(result.docs.map((el) => el.data()))
+    );
   }, []);
+
+  const { user } = useAuthContext();
 
   const navigate = useNavigate();
 
   const handleSubmit = (e) => {
-    e.preventDefault();
-    navigate("/filter");
     localStorage.setItem("search", search);
+    navigate("/filter");
     const searched = [...searchValue, search];
     setSearchValue((prevState) => [...prevState, search]);
     localStorage.setItem("searchValues", JSON.stringify(searched));
   };
 
   return (
-    <Search width={width} onSubmit={handleSubmit}>
+    <Search width={"100%"} onSubmit={handleSubmit}>
       <Autocomplete
         freeSolo
-        id="free-solo-2-demo"
         disableClearable
         options={allJobs.map((job) => job.title)}
+        sx={{ width: "100%" }}
         renderInput={(params) => (
           <TextField
-            // sx={{ width: width, marginTop: "6px" }}
             sx={{
               "& .MuiOutlinedInput-root": {
                 borderTopLeftRadius: "8px",
                 borderBottomLeftRadius: "8px",
                 padding: "0",
                 border: "none",
-                width: width,
+                width: "100%",
+                height: "50px",
               },
 
               "& .MuiOutlinedInput-root:active": {
                 border: "none",
               },
               "& .MuiOutlinedInput-root .MuiOutlinedInput-notchedOutline": {
-                border: "1px solid #e4ebe4",
+                border: "1px solid #3b3c40",
                 width: width,
               },
             }}
             {...params}
-            label="Search for Job..."
+            label={
+              user.type === "recrut"
+                ? "Search for Job..."
+                : "Search for Talents..."
+            }
             onChange={(e) => setSearch(e.target.value)}
             InputProps={{
               ...params.InputProps,
@@ -74,9 +72,7 @@ const Searchbox = ({ width }) => {
         )}
       />
       <Iconsearch>
-        <SearchIcon
-          sx={{ width: "40px", margin: "-8px", color: "white" }}
-        />
+        <SearchIcon sx={{ width: "40px", margin: "-8px", color: "white" }} />
       </Iconsearch>
     </Search>
   );

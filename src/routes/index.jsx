@@ -7,6 +7,10 @@ import Loading from "../components/Loading";
 import { useAuthContext } from "../context/AuthContext";
 
 import ProtectedRoute from "./../components/ProtectedRoute/index";
+import PostJob from "../pages/PostJob";
+import Savedjob from "../pages/SavedJobs";
+import MyJobs from "../pages/MyJobs";
+import SavedTalents from "../pages/SavedTalents";
 
 const Login = lazy(() => import("../pages/Login/index"));
 const Signup = lazy(() => import("../pages/Signup/index"));
@@ -55,11 +59,15 @@ const Routers = () => {
           path="/"
           element={<ProtectedRoute currentLocation={location.pathname} />}
         >
-          <Route path="/home" element={<Home />} />
+          <Route path="/" element={<Home />} />
           <Route path="/filter" element={<Filter />} />
           <Route path="/profile" element={<Profile />} />
           <Route path="/redirect" element={<Navigate to={"/profile"} />} />
           <Route path="/JobDetails/:id" element={<JobDetails />} />
+          <Route path="/post-a-job" element={<PostJob />} />
+          <Route path="/saved-jobs" element={<Savedjob />} />
+          <Route path="/saved-talents" element={<SavedTalents />} />
+          <Route path="/my-jobs" element={<MyJobs />} />
         </Route>
         <Route path="/*" element={<h3>Page not Found</h3>} />
       </Routes>

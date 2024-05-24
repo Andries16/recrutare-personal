@@ -24,6 +24,8 @@ import { useNavigate } from "react-router-dom";
 import { Button, CircularProgress, IconButton, Stack } from "@mui/material";
 import { RemoveRedEyeOutlined } from "@mui/icons-material";
 import { auth } from "../../firebase";
+
+import { signInWithPopup, GoogleAuthProvider } from "firebase/auth";
 function Login() {
   const {
     loading,
@@ -33,6 +35,7 @@ function Login() {
     setUser,
     setAuthorized,
   } = useAuthContext();
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [passwordType, setPasswordType] = useState("password");
@@ -65,7 +68,7 @@ function Login() {
           setUser(userDetails.data());
           localStorage.setItem("user", JSON.stringify(userDetails));
           setAuthorized(true);
-          navigate("/home");
+          navigate("/");
           setLoading(false);
         }
       );
@@ -79,10 +82,16 @@ function Login() {
     }
   };
 
+  const signInWithGoogle = async () => {
+    const provider = new GoogleAuthProvider();
+    await signInWithPopup(auth, provider);
+    navigate("/");
+    setLoading(false);
+  };
   return (
     <>
       <Header form />
-      <StyledForm onSubmit={handleSubmit}>
+      <StyledForm>
         <Register>Log in to Recrut </Register>
         <InputWrapper>
           <label htmlFor="username">Email</label>
@@ -109,9 +118,6 @@ function Login() {
               placeholder="Type Here"
             />
 
-            {errors && errors.password && (
-              <ErrorMessage>{errors.password}</ErrorMessage>
-            )}
             <IconButton
               onClick={handlePasswordShow}
               sx={{ marginRight: "-38px" }}
@@ -119,13 +125,16 @@ function Login() {
               <RemoveRedEyeOutlined />
             </IconButton>
           </Stack>
+          {errors && errors.password && (
+            <ErrorMessage>{errors.password}</ErrorMessage>
+          )}
         </InputWrapper>
 
         <Button
           color="primary"
           variant="contained"
-          type="submit"
           sx={{ width: "60%", borderRadius: "20px", marginTop: "30px" }}
+          onClick={handleSubmit}
         >
           {loading ? <CircularProgress color="inherit" /> : "  Log In"}
         </Button>
@@ -134,14 +143,9 @@ function Login() {
           <div></div> <span>or</span> <div></div>
         </StyledOR>
 
-        <StyledButton facebook={apple}>
+        <StyledButton type="button" facebook={apple} onClick={signInWithGoogle}>
           <StyledImg src={google} alt="google" />
           Continue with Google
-        </StyledButton>
-
-        <StyledButton>
-          <StyledImg src={apple} alt="facebook" facebook={apple} />
-          Continue with apple
         </StyledButton>
 
         <AlredyAccount>Don’t have an Recrut account?</AlredyAccount>

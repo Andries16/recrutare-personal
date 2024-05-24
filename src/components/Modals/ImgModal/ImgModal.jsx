@@ -3,9 +3,17 @@ import Box from "@mui/material/Box";
 
 import Typography from "@mui/material/Typography";
 import Modal from "@mui/material/Modal";
-import axios from "axios";
-import { Navigate } from "react-router-dom";
-import {Input,Span,Button} from './style'
+import ProfileImage from "../../../pages/Profile/ProfileImage/ProfileImage";
+import {
+  ref as storageRef,
+  uploadBytes,
+  getDownloadURL,
+} from "firebase/storage";
+import { useAuthContext } from "../../../context/AuthContext";
+import { getDocs, updateDoc } from "firebase/firestore";
+import { query, collection, where } from "firebase/firestore";
+import { db, storage } from "../../../firebase";
+import { Avatar, Button, Stack, TextField } from "@mui/material";
 
 const style = {
   position: "absolute",
@@ -15,6 +23,10 @@ const style = {
   width: 500,
   bgcolor: "background.paper",
   border: "2px solid #000",
+  "&:focus-visible": {
+    border: "none",
+    outline: "none",
+  },
   boxShadow: 24,
   p: 10,
 };
@@ -23,84 +35,49 @@ const ImgModal = () => {
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
-  const [newImg, setNewImg] = useState("");
-  const [overView, setOverView] = useState("");
-  const [rate, setRate] = useState("");
-  const [skills, setSkills] = useState([]);
-  const [title, setTitle] = useState("");
 
+  const [selectedFileUrl, setSelectedFileUrl] = useState();
+  const [imageToUpload, setImageToUpload] = useState();
 
-  const [navigator, setNavigator] = useState(false);
-
+  const { user, setUser } = useAuthContext();
   useEffect(() => {
-    (async () => {
-      try {
-        const res = await axios.get(
-          `${process.env.REACT_APP_API_URL}/personalInformation`
-        );
-        if (res) {
-          setNewImg(res.data[0].image);
-          setOverView(res.data[0].overview);
-          setRate(res.data[0].rate);
-          setSkills(res.data[0].skills);
-                  setTitle(res.data[0].title);
+    setSelectedFileUrl(user.photoURL);
+  }, [user.photoURL]);
 
-
-        }
-      } catch (error) {
-        console.log(error);
-      }
-    })();
-  }, []);
-
-  const handleChangeInput = (e) => {
-    const { value } = e.target;
-    setNewImg(value);
+  const handleUploadClick = (event) => {
+    var file = event.target.files[0];
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onloadend = function () {
+      setSelectedFileUrl(reader.result);
+    };
+    setImageToUpload(file);
   };
 
-  const handleUpdateTitle = (e) => {
+  const uploadFile = async (e) => {
     e.preventDefault();
-
-    (async () => {
-      try {
-        const res = await axios.put(
-          `${process.env.REACT_APP_API_URL}/personalInformation/1`,
-          {
-            title: title,
-            overview: overView,
-            rate: rate,
-            skills:skills,
-            image:newImg
-
-          }
-        );
-        if (res) {
-          setNavigator(true);
-        }
-      } catch (error) {
-        console.log(error);
-      }
-    })();
+    if (imageToUpload === null) return;
+    const imageRef = storageRef(storage, `users`);
+    uploadBytes(imageRef, imageToUpload).then(async (snapshot) => {
+      const url = await getDownloadURL(snapshot.ref);
+      setUser({ ...user, photoURL: url });
+      const {
+        docs: [userSnap],
+      } = await getDocs(
+        query(collection(db, "users"), where("email", "==", user.email))
+      );
+      await updateDoc(userSnap.ref, {
+        photoURL: url,
+      });
+      handleClose();
+    });
   };
 
   return (
     <div>
-      <Span>
-      <svg
-            onClick={handleOpen}
-            xmlns="http://www.w3.org/2000/svg"
-            aria-hidden="true"
-            fill="#3c8224"
-            viewBox="0 0 14 14"
-            role="img"
-            style={{ width:"30px",height:"30px",cursor:"pointer",position:'absolute',top:'200px',left:"300px"}}
-          >
-            <path
-              fillRule="evenodd"
-              d="M0 11.044V14h2.956l8.555-8.633L8.556 2.41 0 11.044zm13.767-7.933a.752.752 0 000-1.089L11.977.233a.752.752 0 00-1.088 0l-1.4 1.4 2.955 2.956 1.323-1.478z"
-            ></path>
-          </svg>
-      </Span>
+      <Box onClick={handleOpen}>
+        <ProfileImage />
+      </Box>
       <Modal
         open={open}
         onClose={handleClose}
@@ -108,21 +85,48 @@ const ImgModal = () => {
         aria-describedby="modal-modal-description"
       >
         <Box sx={style}>
-          <Typography id="modal-modal-title" variant="h6" component="h1">
-            Edit Your Image
-          </Typography>
-          <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-          </Typography>
-          <form onSubmit={handleUpdateTitle}>
-            <Input type="text" value={newImg} onChange={handleChangeInput} />
-            <Button type="submit">save</Button>
-            <Button type="button" onClick={handleClose}>
-              cancel
-            </Button>
-          </form>
+          <Stack sx={{ justifyContent: "center" }}>
+            <Typography id="modal-modal-title" variant="h6" component="h1">
+              Edit Your Image
+            </Typography>
+            <Avatar
+              sx={{
+                width: "150px",
+                height: "150px",
+                background: "transparent",
+                border: "1px dashed white",
+                alignSelf: "center",
+              }}
+              src={selectedFileUrl}
+            />
+            <label
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                width: "100%",
+                justifyContent: "center",
+                alignItems: "center",
+                margin: "10px 0",
+              }}
+            >
+              <TextField type="file" onChange={handleUploadClick} />
+            </label>
+            <form onSubmit={uploadFile}>
+              <Button type="submit" color="secondary">
+                Save
+              </Button>
+              <Button
+                type="button"
+                color="secondary"
+                variant="outlined"
+                onClick={handleClose}
+              >
+                Cancel
+              </Button>
+            </form>
+          </Stack>
         </Box>
       </Modal>
-      {navigator ? <Navigate to={"/redirect"} /> : ""}
     </div>
   );
 };

@@ -6,6 +6,7 @@ import CompleteProfile from "../../pages/CompleteProfile/index.jsx";
 
 const ProtectedRoute = () => {
   const { authorized, user } = useAuthContext();
+  console.log(user);
   return (
     <div>
       {authorized ? (

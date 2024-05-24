@@ -8,6 +8,7 @@ import MostRecent from "../MostRecent";
 import Savedjob from "../Savedjob";
 import { useJobContext } from "../../context/jobContext";
 import { useState } from "react";
+import { useAuthContext } from "../../context/AuthContext";
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -44,7 +45,7 @@ function a11yProps(index) {
 
 export default function BasicTabs() {
   const [value, setValue] = useState(0);
-
+  const { user } = useAuthContext();
   const { state } = useJobContext();
 
   const handleChange = (event, newValue) => {
@@ -63,7 +64,14 @@ export default function BasicTabs() {
         >
           <Tab label="Best Matches" {...a11yProps(0)} />
           <Tab label="Most Recent" {...a11yProps(1)} />
-          <Tab label={`Saved Jobs (${state.count})`} {...a11yProps(2)} />
+          <Tab
+            label={
+              user.type === "recrut"
+                ? `Saved Jobs (${state.count})`
+                : `Saved Talents`
+            }
+            {...a11yProps(2)}
+          />
         </Tabs>
       </Box>
       <TabPanel value={value} index={0}>

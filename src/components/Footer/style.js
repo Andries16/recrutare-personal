@@ -1,9 +1,10 @@
 import styled from "styled-components";
 
 export const StyledFooter = styled.footer`
+  border-top: 1px solid #3b3c40;
   width: auto;
   margin: 0 auto;
-  background-color: #222831;
+  background-color: #313a49;
   color: #fff;
   display: flex;
   flex-direction: column;

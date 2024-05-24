@@ -2,7 +2,7 @@ import styled from "styled-components";
 
 export const Jobs = styled.div`
   width: 820px;
-  border: 1px solid #e4ebe4;
+  border: 1px solid #3b3c40;
   margin-top: 16px;
   border-radius: 10px;
   padding: 10px;

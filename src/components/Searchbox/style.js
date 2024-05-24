@@ -5,19 +5,13 @@ export const Search = styled.form`
   margin-top: 10px;
   align-items: center;
   margin-bottom: 10px;
+  color: black;
 `;
-
-// export const Iconsearch = styled.div`
-//   width: 45px;
-//   background-color: #3c8224;
-//   border-radius: 6px;
-//   margin-top: 5px;
-// `;
 
 export const Iconsearch = styled.button`
   width: 35px;
-  background-color: #3c8224;
-  height: 38px;
+  background-color: rgb(118, 171, 174);
+  height: 50px;
   cursor: pointer;
   outline: none;
   border: none;

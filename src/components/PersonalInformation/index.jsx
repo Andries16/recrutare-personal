@@ -1,58 +1,66 @@
 import React from "react";
 import { Box, Info, Profile } from "./style";
-import SliderSizes from "../SliderSizes";
-import { Avatar, Divider, Typography } from "@mui/material";
+import { Avatar, Divider, Switch, Typography } from "@mui/material";
 import { useAuthContext } from "../../context/AuthContext";
-import { Edit } from "@mui/icons-material";
 import { useNavigate } from "react-router-dom";
+import {
+  collection,
+  getDocs,
+  query,
+  updateDoc,
+  where,
+} from "firebase/firestore";
+import { db } from "../../firebase";
 const PersonalInformation = () => {
-  const { user } = useAuthContext();
+  const { user, setUser } = useAuthContext();
   const navigate = useNavigate();
 
+  const onChangeAvailability = async ({ target: { value } }) => {
+    const {
+      docs: [userSnap],
+    } = await getDocs(
+      query(collection(db, "users"), where("email", "==", user.email))
+    );
+    setUser({ ...user, available: !user.available });
+    updateDoc(userSnap.ref, { available: !user.available });
+  };
   return (
     <Box>
       <Profile>
         <Avatar src={user.photoURL} />
         <h2 onClick={() => navigate("/profile")}>{user.displayName}</h2>
         <Typography>{user.jobTitle}</Typography>
-        <p>Profile Completeness:</p>
-        <p>
-          <SliderSizes />
-        </p>
-
-        <Divider variant="fullWidth" />
-        <div>{user.connects || 0} Available Connects</div>
+        <Typography component="h6" sx={{ textTransform: "capitalize" }}>
+          {user.type}
+        </Typography>
+        <Divider
+          variant="fullWidth"
+          orientation="horizontal"
+          sx={{ borderColor: "white" }}
+        />
+        {user.type === "recrut" && (
+          <div>{user.connects || 0} Available Connects</div>
+        )}
       </Profile>
+      {user.type === "recrut" && (
+        <Info>
+          <li>
+            <p>
+              Availability Badge
+              <span>{user.available ? "Available" : "Not available"}</span>
+            </p>
 
-      <Info>
-        <li>
-          <p>
-            Availability Badge
-            <span>{user.available ? "Available" : "Not available"}</span>
-          </p>
+            <Switch checked={user.available} onChange={onChangeAvailability} />
+          </li>
 
-          <Edit sx={{ color: "black" }} />
-        </li>
-
-        <li>
-          <p>
-            Profile Visibility
-            <span>{user.visibility || "Public"}</span>
-          </p>
-
-          <Edit sx={{ color: "black" }} />
-        </li>
-
-        <Divider variant="fullWidth" />
-        <li>
-          <p>
-            My Categories
-            <span>{user.categories}</span>
-          </p>
-
-          <Edit sx={{ color: "black" }} />
-        </li>
-      </Info>
+          <li>
+            <p>
+              Profile Visibility
+              <span>{user.visibility || "Public"}</span>
+            </p>
+          </li>
+        </Info>
+      )}
     </Box>
   );
 };

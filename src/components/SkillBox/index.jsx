@@ -3,111 +3,79 @@ import Autocomplete from "@mui/material/Autocomplete";
 import TextField from "@mui/material/TextField";
 import Stack from "@mui/material/Stack";
 import { useEffect, useState } from "react";
-import axios from "axios";
-import { Navigate } from "react-router-dom";
+import { Button } from "@mui/material";
+import { useAuthContext } from "../../context/AuthContext";
+import {
+  collection,
+  getDocs,
+  query,
+  updateDoc,
+  where,
+} from "firebase/firestore";
+import { db } from "../../firebase";
 
 export default function SkillBox(props) {
-  const [skills, setSkills] = useState([]);
   const [choosenSkills, setChoosenSkills] = useState([]);
-  const [selectiveSkills, setSelectiveSkills] = useState(skills);
-  const [img, setImg] = useState("");
 
-  const [overview, setOverView] = useState("");
-  const [title, setTitle] = useState("");
-  const [rate, setRate] = useState("");
-  const [navigator, setNavigator] = useState(false);
-
+  const { user, setUser } = useAuthContext();
   useEffect(() => {
-    (async () => {
-      try {
-        var res1 = await axios.get(`${process.env.REACT_APP_API_URL}/skills`);
-        if (res1.data) {
-          setSkills(res1.data);
-        }
-      } catch (error) {
-        console.log(error);
-      }
-      try {
-        const res = await axios.get(
-          `${process.env.REACT_APP_API_URL}/personalInformation/1`
-        );
-        if (res.data) {
-          setChoosenSkills(res.data.skills);
-          setTitle(res.data.title);
-          setOverView(res.data.overview);
-          setRate(res.data.rate);
-          setImg(res.data.image);
-          const arrayOne = res1.data;
-          const arrayTwo = res.data.skills;
-          const results = arrayOne.filter(
-            ({ id: id1 }) => !arrayTwo.some(({ id: id2 }) => id2 === id1)
-          );
+    setChoosenSkills(user.skills);
+  }, [user.skills]);
 
-          console.log("3", results);
-          setSelectiveSkills(results);
-
-          console.log(results);
-        }
-      } catch (error) {
-        console.log(error);
-      }
-    })();
-  }, []);
-
-  const handleUpdateSkills = (e) => {
+  const handleUpdateSkills = async (e) => {
     e.preventDefault();
-
-    (async () => {
-      try {
-        const res = await axios.put(
-          `${process.env.REACT_APP_API_URL}/personalInformation/1`,
-          {
-            rate: rate,
-            overview: overview,
-            title: title,
-            skills: choosenSkills,
-            image: img,
-          }
-        );
-        if (res) {
-          setNavigator(true);
-        }
-      } catch (error) {
-        console.log(error);
-      }
-    })();
+    const {
+      docs: [userSnap],
+    } = await getDocs(
+      query(collection(db, "users"), where("email", "==", user.email))
+    );
+    setUser({ ...user, skills: choosenSkills });
+    await updateDoc(userSnap.ref, { skills: choosenSkills });
+    props.handleClose();
   };
 
   return (
     <>
-      <Stack spacing={3} sx={{ width: 500 }}>
+      <Stack spacing={3} sx={{ width: 500, marginTop: "30px" }}>
         <Autocomplete
+          defaultValue={[]}
           multiple
-          id="tags-outlined"
-          options={selectiveSkills}
-          getOptionLabel={(option) => option.title}
+          id="tags-filled"
+          options={[]}
+          freeSolo
+          renderTags={(value, getTagProps) =>
+            value.map((option, index) => (
+              <Chip
+                key={index}
+                variant="outlined"
+                label={option}
+                {...getTagProps({ index })}
+              />
+            ))
+          }
           onChange={(e, choosenSkills) => {
             e.preventDefault();
             setChoosenSkills(choosenSkills);
           }}
           value={choosenSkills}
-          filterSelectedOptions
-          renderTags={(value, getTagProps) =>
-            value.map((option, index) => (
-              <Chip label={option.title} {...getTagProps({ index })} />
-            ))
-          }
           renderInput={(params) => (
-            <TextField {...params} label="Skills" placeholder="Skills" />
+            <TextField {...params} fullWidth label="Skills Required" />
           )}
         />
+
         <form onSubmit={handleUpdateSkills}>
-          <button type="submit">save</button>
-          <button type="button" onClick={props.handleClose}>
-            cancel
-          </button>
+          <Button type="submit" color="secondary">
+            Save
+          </Button>
+          <Button
+            type="button"
+            color="secondary"
+            variant="outlined"
+            onClick={props.handleClose}
+          >
+            Cancel
+          </Button>
         </form>
-        {navigator ? <Navigate to={"/redirect"} /> : ""}
       </Stack>
     </>
   );

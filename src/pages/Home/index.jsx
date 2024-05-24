@@ -20,7 +20,7 @@ const Home = () => {
           <Box>
             <TimeStatus />
             <div>
-              <Searchbox width="795px" />
+              <Searchbox width="100%" />
               <div>
                 Recent Searches:{" "}
                 {searchValue.slice(-3).map((value, index) => (

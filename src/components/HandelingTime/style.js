@@ -7,7 +7,7 @@ export const StatusOfTime = styled.div`
   justify-content: space-between;
   border-radius: 10px;
   width: 820px;
-  border: 1px solid #e4ebe4;
+  background: rgb(49, 58, 73);
   & img {
     width: 180px;
     height: 140px;

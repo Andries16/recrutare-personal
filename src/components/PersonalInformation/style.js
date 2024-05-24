@@ -13,9 +13,9 @@ export const Profile = styled.div`
   align-items: center;
   width: 100%;
   box-sizing: border-box;
-  border: 1px solid #e4ebe4;
   border-radius: 10px;
   padding: 10px;
+  background: rgb(49, 58, 73);
   & img {
     border-radius: 50%;
     width: 50px;
@@ -28,27 +28,26 @@ export const Profile = styled.div`
     margin-bottom: 10px;
   }
   & div {
-    color: #3c8224;
+    color: rgb(136, 136, 136);
   }
   &:hover {
     h2 {
-      color: #3c8224;
-      cursor: pointer;
+      color: rgb(136, 136, 136);
       text-decoration: underline;
     }
+    cursor: pointer;
   }
 `;
 
 export const Info = styled.ul`
   width: 100%;
-  border: 1px solid #e4ebe4;
   border-radius: 10px;
   padding: 20px;
   box-sizing: border-box;
+  background: rgb(49, 58, 73);
   & li svg {
-    background-color: #fff;
-    border: 1px solid #909090;
-
+    background-color: rgb(118, 171, 174);
+    border: 1px solid #fff;
     width: 18px;
     margin-left: 60px;
     padding: 10px;

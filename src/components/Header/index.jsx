@@ -1,6 +1,5 @@
 import {
   Head,
-  Online,
   Profilediv,
   StyledBoxes,
   Stylednav,
@@ -14,16 +13,8 @@ import { Link, useNavigate } from "react-router-dom";
 import { Button, Avatar, Stack } from "@mui/material";
 export default function Header({ form }) {
   const [showDiv, setShowDiv] = useState(false);
-  const [isOnline, setIsOnline] = useState(false);
   const handleShow = () => {
     setShowDiv(!showDiv);
-  };
-  const handleOnlineClick = () => {
-    setIsOnline(true);
-  };
-
-  const handleInvisibleClick = () => {
-    setIsOnline(false);
   };
 
   const navigate = useNavigate();
@@ -31,13 +22,15 @@ export default function Header({ form }) {
   if (form) {
     return (
       <Stylednav>
-        <Head>Recrut</Head>
+        <Link to={"/home"}>
+          <Head>Recrut</Head>
+        </Link>
       </Stylednav>
     );
   } else {
     return (
       <Stylednav>
-        <Link to={"/home"}>
+        <Link to={"/"}>
           <Head>Recrut</Head>
         </Link>
         <StyledBoxes>
@@ -60,18 +53,9 @@ export default function Header({ form }) {
                   <Profilediv>
                     <Avatar src={user.photoURL} alt="profile" />
                     <h2>{user.displayName}</h2>
-                    <span>Freelancer</span>
-                    <div>
-                      <Online isOnline={isOnline} onClick={handleOnlineClick}>
-                        Online
-                      </Online>
-                      <Online
-                        isOnline={!isOnline}
-                        onClick={handleInvisibleClick}
-                      >
-                        Invisible
-                      </Online>
-                    </div>
+                    <span style={{ textTransform: "capitalize" }}>
+                      {user.type}
+                    </span>
                     <ul>
                       <Logout />
                     </ul>

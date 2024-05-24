@@ -1,15 +1,14 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import Header from "../../components/Header";
 import Footer from "../../components/Footer/index";
 import OverViewModal from "../../components/Modals/OverViewModal";
 import RateModal from "../../components/Modals/RateModal";
 import SkillsModal from "../../components/Modals/SkillsModal";
 import TitleModal from "../../components/Modals/TitleModal";
-import { Container, OverView, Title, Hr, Rate, SKILLS, Span } from "./style";
-import ProfileImage from "./ProfileImage/ProfileImage";
-import { Styledskill } from "../../components/ListOfSkills/style";
+import { Container, OverView, Title, Rate, SKILLS, Span } from "./style";
 import { useAuthContext } from "../../context/AuthContext";
-import { Stack } from "@mui/material";
+import { Chip, Stack } from "@mui/material";
+import ImgModal from "../../components/Modals/ImgModal/ImgModal";
 const Profile = () => {
   const { user } = useAuthContext();
   console.log(user);
@@ -19,17 +18,19 @@ const Profile = () => {
       <Container>
         <Stack flexDirection="row">
           <Stack sx={{ width: "30%" }}>
-            <ProfileImage />
+            <ImgModal />
           </Stack>
           <Stack sx={{ width: "70%" }}>
             <Stack flexDirection="row" alignItems="center">
-              <Title>{user.jobTitle}</Title>
-              <TitleModal />
+              <Title>{user.displayName}</Title>
+              {user.type === "recrut" && <TitleModal />}
             </Stack>
-            <Stack flexDirection="row" alignItems="center">
-              <Rate>${user.rate}</Rate>
-              <RateModal />
-            </Stack>
+            {user.type === "recrut" && (
+              <Stack flexDirection="row" alignItems="center">
+                <Rate>${user.rate}</Rate>
+                <RateModal />
+              </Stack>
+            )}
             <Stack
               flexDirection="row"
               alignItems="center"
@@ -38,19 +39,23 @@ const Profile = () => {
               <OverView>{user.description}</OverView>
               <OverViewModal />
             </Stack>
-            <Span>skills</Span>
-            <Stack
-              flexDirection="row"
-              alignItems="center"
-              sx={{ marginRight: "10px" }}
-            >
-              <SKILLS>
-                {[1, 2, 3, 4].map((item, key) => (
-                  <Styledskill key={key}>{"React"}</Styledskill>
-                ))}
-              </SKILLS>
-              <SkillsModal />
-            </Stack>
+            {user.type === "recrut" && (
+              <>
+                <Span>Skills</Span>
+                <Stack
+                  flexDirection="row"
+                  alignItems="center"
+                  sx={{ marginRight: "10px" }}
+                >
+                  <SKILLS>
+                    {user.skills.map((item, key) => (
+                      <Chip sx={{ margin: "2px" }} label={item} />
+                    ))}
+                  </SKILLS>
+                  <SkillsModal />
+                </Stack>
+              </>
+            )}
           </Stack>
         </Stack>
       </Container>

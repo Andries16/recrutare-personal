@@ -2,7 +2,7 @@ export const themeOptions = {
   palette: {
     mode: "dark",
     primary: {
-      main: "#EEEEEE",
+      main: "#76ABAE",
     },
     secondary: {
       main: "#76ABAE",
