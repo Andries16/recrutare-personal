@@ -67,7 +67,7 @@ export default function PostAJob() {
                     marginBottom: "0px",
                   }}
                 >
-                  Get over 50.000+ talented experts in jobi.
+                  Obțineți peste 50.000 de experți talentați în Recrut.
                 </h2>
               </div>
               <p
@@ -78,8 +78,9 @@ export default function PostAJob() {
                   marginBottom: "40px",
                 }}
               >
-                A full hybrid workforce management tools are yours to use, as
-                well as access to our top 1% of talent.
+                Un instrument hibrid complet de gestionare a forței de muncă vă
+                puteți folosi, precum și accesul la cei mai buni 1% dintre
+                talente.
               </p>
               <ul
                 style={{
@@ -97,7 +98,7 @@ export default function PostAJob() {
                     marginTop: "24px",
                   }}
                 >
-                  - Seamless searching
+                  - Căutare fără întreruperi
                 </li>
                 <li
                   style={{
@@ -109,19 +110,7 @@ export default function PostAJob() {
                     marginTop: "24px",
                   }}
                 >
-                  - Get top 3% experts for your project
-                </li>
-                <li
-                  style={{
-                    boxSizing: "border-box",
-                    position: "relative",
-                    fontWeight: 500,
-                    fontSize: "18px",
-                    paddingLeft: "35px",
-                    marginTop: "24px",
-                  }}
-                >
-                  - Protected payments system
+                  - Obțineți cei mai buni 3% experți pentru proiectul dvs
                 </li>
               </ul>
             </div>

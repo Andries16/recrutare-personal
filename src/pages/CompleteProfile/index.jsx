@@ -5,6 +5,8 @@ import {
   TextField,
   Typography,
   Box,
+  Autocomplete,
+  Chip,
 } from "@mui/material";
 import { DatePicker } from "@mui/x-date-pickers";
 import { useCallback, useState } from "react";
@@ -173,6 +175,38 @@ export default function CompleteProfile() {
               helperText={errors.skills}
               onChange={changeHandler("skills")}
               placeholder="What is your profiency"
+            />
+            <Autocomplete
+              defaultValue={[]}
+              multiple
+              id="tags-filled"
+              options={[]}
+              name="skillsRequired"
+              freeSolo
+              renderTags={(value, getTagProps) =>
+                value.map((option, index) => (
+                  <Chip
+                    variant="outlined"
+                    label={option}
+                    {...getTagProps({ index })}
+                  />
+                ))
+              }
+              onChange={(event, values) => {
+                changeHandler("skills")({
+                  target: { name: "skills", value: values },
+                });
+              }}
+              renderInput={(params) => (
+                <TextField
+                  {...params}
+                  fullWidth
+                  label="Skills"
+                  error={!!errors.skills}
+                  helperText={errors.skills}
+                  onChange={changeHandler("skills")}
+                />
+              )}
             />
             <TextField
               sx={{

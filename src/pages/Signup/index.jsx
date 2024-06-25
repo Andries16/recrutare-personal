@@ -27,6 +27,7 @@ import { IconButton, Stack } from "@mui/material";
 import { RemoveRedEyeOutlined } from "@mui/icons-material";
 
 import { signInWithPopup, GoogleAuthProvider } from "firebase/auth";
+import { useNavigate } from "react-router-dom";
 const Signup = () => {
   const {
     setAuthorized,
@@ -43,7 +44,7 @@ const Signup = () => {
   const [password, setPassword] = useState("");
   const [checked, setChecked] = useState(false);
   const [passwordType, setPasswordType] = useState("password");
-
+  const navigate = useNavigate();
   const handleChangeInput = (e) => {
     const { value, id } = e.target;
     if (id === "firstname") setFirstName(value);
@@ -87,6 +88,7 @@ const Signup = () => {
             await addDoc(collection(db, "users"), userToSave);
             setUser(userToSave);
             setAuthorized(true);
+            navigate("/");
           }
         );
       })

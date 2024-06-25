@@ -1,4 +1,12 @@
-import { Code } from "@mui/icons-material";
+import {
+  Code,
+  AccountBalance,
+  AttachMoney,
+  PeopleAlt,
+  Fastfood,
+  AssignmentInd,
+  Calculate,
+} from "@mui/icons-material";
 import { Stack, Typography } from "@mui/material";
 
 export default function Categories() {
@@ -13,7 +21,24 @@ export default function Categories() {
         flexDirection="row"
         sx={{ color: "black !important", marginTop: "50px" }}
       >
-        {[1, 2, 3, 4, 5, 6, 7].map((el) => (
+        {[
+          { title: "It, Programare", icon: <Code fontSize="large" /> },
+          { title: "Achiziții", icon: <AttachMoney fontSize="large" /> },
+          { title: "Manageri", icon: <PeopleAlt fontSize="large" /> },
+          {
+            title: "Alimentatia Publică",
+            icon: <Fastfood fontSize="large" />,
+          },
+          {
+            title: "Joburi fără experiență",
+            icon: <AssignmentInd fontSize="large" />,
+          },
+          {
+            title: "Bănci, Credite",
+            icon: <AccountBalance fontSize="large" />,
+          },
+          { title: "Contabilitate", icon: <Calculate fontSize="large" /> },
+        ].map((el) => (
           <Stack
             sx={{
               background: "white",
@@ -27,9 +52,9 @@ export default function Categories() {
             }}
             key={el}
           >
-            <Code fontSize="large" />
+            {el.icon}
             <Typography fontSize={14} fontWeight="light">
-              Developpement
+              {el.title}
             </Typography>
           </Stack>
         ))}

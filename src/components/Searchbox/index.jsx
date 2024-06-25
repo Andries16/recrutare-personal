@@ -24,6 +24,7 @@ const Searchbox = ({ width }) => {
 
   const handleSubmit = (e) => {
     localStorage.setItem("search", search);
+    console.log(search);
     navigate("/filter");
     const searched = [...searchValue, search];
     setSearchValue((prevState) => [...prevState, search]);

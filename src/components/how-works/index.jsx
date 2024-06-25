@@ -141,7 +141,7 @@ export default function HowItWorks() {
                     color: "rgba(255,255,255,1)",
                   }}
                 >
-                  Create Account
+                  Crează contul
                 </div>
                 <p
                   style={{
@@ -154,7 +154,8 @@ export default function HowItWorks() {
                     color: "#76ABAE",
                   }}
                 >
-                  It’s very easy to open an account and start your journey.
+                  Este foarte ușor să deschizi un cont și să-ți începi
+                  călătoria.
                 </p>
               </div>
             </div>
@@ -212,7 +213,7 @@ export default function HowItWorks() {
                     color: "rgba(255,255,255,1)",
                   }}
                 >
-                  Complete your profile
+                  Completează-ți profilul
                 </div>
                 <p
                   style={{
@@ -225,8 +226,8 @@ export default function HowItWorks() {
                     color: "#76ABAE",
                   }}
                 >
-                  Complete your profile with all the info to get attention of
-                  client.
+                  Completează-ți profilul cu toate informațiile pentru a atrage
+                  atenția clientului.
                 </p>
               </div>
             </div>
@@ -285,7 +286,7 @@ export default function HowItWorks() {
                     color: "rgba(255,255,255,1)",
                   }}
                 >
-                  Apply job or hire
+                  Aplicați un loc de muncă sau angajați
                 </div>
                 <p
                   style={{
@@ -298,8 +299,8 @@ export default function HowItWorks() {
                     color: "#76ABAE",
                   }}
                 >
-                  Apply & get your preferable jobs with all the requirements and
-                  get it.
+                  Aplicați și obțineți locurile de muncă preferate cu toate
+                  cerințele și obțineți-l.
                 </p>
               </div>
             </div>
