@@ -23,6 +23,9 @@ const Profile = () => {
           <Stack sx={{ width: "70%" }}>
             <Stack flexDirection="row" alignItems="center">
               <Title>{user.displayName}</Title>
+            </Stack>
+            <Stack flexDirection="row" alignItems="center">
+              <Title>{user.jobTitle}</Title>
               {user.type === "recrut" && <TitleModal />}
             </Stack>
             {user.type === "recrut" && (

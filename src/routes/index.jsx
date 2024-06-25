@@ -6,7 +6,7 @@ import { Routes, Route, Navigate, useLocation } from "react-router-dom";
 import Loading from "../components/Loading";
 import { useAuthContext } from "../context/AuthContext";
 
-import ProtectedRoute from "./../components/ProtectedRoute/index";
+import ProtectedRoute from "./../components/ProtectedRoute";
 import PostJob from "../pages/PostJob";
 import Savedjob from "../pages/SavedJobs";
 import MyJobs from "../pages/MyJobs";

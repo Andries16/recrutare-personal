@@ -37,6 +37,7 @@ const JobCard = ({ Jobdetails }) => {
   };
 
   const navigate = useNavigate();
+
   return (
     <>
       {Jobdetails?.map((detail) => (

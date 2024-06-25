@@ -53,7 +53,7 @@ export default function CompleteProfile() {
   const save = useCallback(
     async (url) => {
       const validateForm = () => {
-        let errors = {};
+        let errors;
 
         if (!selectedFileUrl) errors.image = "Image is required";
         if (!userDetails.birthday) errors.birthday = "Birthday is required";

@@ -18,6 +18,7 @@ const Filter = () => {
   const [searchValue] = useState(localStorage.getItem("search"));
   const { user } = useAuthContext();
 
+  useEffect(() => {}, []);
   useEffect(() => {
     if (user.type === "recrut") {
       const fuseOptions = {
